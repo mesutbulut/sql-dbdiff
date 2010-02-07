@@ -37,6 +37,8 @@ namespace DBDiff.Front
             this.txtNewObject = new DBDiff.Scintilla.Scintilla();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.txtOldObject = new DBDiff.Scintilla.Scintilla();
+            this.tabDiff = new System.Windows.Forms.TabPage();
+            this.diffControl = new Menees.DiffUtils.Controls.DiffControl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -74,6 +76,7 @@ namespace DBDiff.Front
             ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).BeginInit();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).BeginInit();
+            this.tabDiff.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -129,6 +132,7 @@ namespace DBDiff.Front
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Controls.Add(this.tabDiff);
             this.tabControl2.Location = new System.Drawing.Point(350, 50);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
@@ -176,6 +180,27 @@ namespace DBDiff.Front
             this.txtOldObject.Name = "txtOldObject";
             this.txtOldObject.Size = new System.Drawing.Size(450, 378);
             this.txtOldObject.TabIndex = 0;
+            // 
+            // tabDiff
+            // 
+            this.tabDiff.Controls.Add(this.diffControl);
+            this.tabDiff.Location = new System.Drawing.Point(4, 22);
+            this.tabDiff.Name = "tabDiff";
+            this.tabDiff.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDiff.Size = new System.Drawing.Size(456, 384);
+            this.tabDiff.TabIndex = 2;
+            this.tabDiff.Text = "Visual Diff";
+            this.tabDiff.UseVisualStyleBackColor = true;
+            // 
+            // diffControl
+            // 
+            this.diffControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.diffControl.Location = new System.Drawing.Point(3, 3);
+            this.diffControl.Name = "diffControl";
+            this.diffControl.ShowWhitespaceInLineDiff = true;
+            this.diffControl.Size = new System.Drawing.Size(450, 378);
+            this.diffControl.TabIndex = 0;
+            this.diffControl.ViewFont = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             // 
             // groupBox2
             // 
@@ -553,6 +578,7 @@ namespace DBDiff.Front
             ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).EndInit();
             this.tabPage5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).EndInit();
+            this.tabDiff.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -610,5 +636,7 @@ namespace DBDiff.Front
         private System.Windows.Forms.Button btnSaveProject;
         private System.Windows.Forms.Button btnProject;
         private System.Windows.Forms.Button btnNewProject;
+        private System.Windows.Forms.TabPage tabDiff;
+        private Menees.DiffUtils.Controls.DiffControl diffControl;
     }
 }

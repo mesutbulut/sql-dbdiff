@@ -10,6 +10,8 @@ using DBDiff.Schema.SQLServer.Generates.Generates;
 using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Settings;
+using Menees.DiffUtils;
+using System.Collections.Generic;
 /*using DBDiff.Schema.SQLServer2000;
 using DBDiff.Schema.SQLServer2000.Model;
 using DBDiff.Schema.SQLServer2000.Compare;
@@ -153,8 +155,8 @@ namespace DBDiff.Front
         {
             txtNewObject.IsReadOnly = false;
             txtOldObject.IsReadOnly = false;
-            txtNewObject.Text = "";
-            txtOldObject.Text = "";
+            txtNewObject.Text = string.Empty;
+            txtOldObject.Text = string.Empty;
 
             Database database = (Database) schemaTreeView1.DatabaseSource;
             if (database.Find(ObjectFullName) != null)
@@ -171,6 +173,20 @@ namespace DBDiff.Front
             }
             txtNewObject.IsReadOnly = true;
             txtOldObject.IsReadOnly = true;
+
+            //Make sure we have a new and an old object before we try and do a diff.
+            if (!string.IsNullOrEmpty(txtNewObject.Text) && !string.IsNullOrEmpty(txtOldObject.Text))
+            {
+                TextDiff textDiff = new TextDiff(HashType.HashCode, true, true);
+                
+                //Make 2 lists, containing every line from the old and the new sql queries
+                List<string> oldLines, newLines; 
+                newLines = new List<string>(txtNewObject.Text.Split('\n'));
+                oldLines = new List<string>(txtOldObject.Text.Split('\n'));
+
+                EditScript editScript = textDiff.Execute(newLines, oldLines);
+                diffControl.SetData(newLines, oldLines, editScript, "New", "Old");
+            }
         }
 
         /*private void ProcesarSQL2000()
