@@ -219,10 +219,9 @@ namespace DBDiff.Front
             try
             {
                 Cursor = Cursors.WaitCursor;
-                //if (optSQL2000.Checked) ProcesarSQL2000();
-                if (optSQL2005.Checked) ProcesarSQL2005();
-                //if (optMySQL.Checked) ProcesarMySQL();
-                //if (optSybase.Checked) ProcesarSybase();
+                
+                ProcesarSQL2005();
+                
                 Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
             }
             catch (Exception ex)
@@ -234,38 +233,6 @@ namespace DBDiff.Front
                 Cursor = Cursors.Default;
             }
         }
-
-        private void optMySQL_CheckedChanged(object sender, EventArgs e)
-        {
-            /*if (optMySQL.Checked)
-            {
-                ShowMySQL();
-            }
-            else
-            {
-                this.groupBox2.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront1);
-                this.groupBox3.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront2);
-            }*/
-        }
-
-        /*private void ShowMySQL()
-        {
-            this.mySqlConnectFront2 = new DBDiff.Schema.MySQL.Front.MySqlConnectFront();
-            this.mySqlConnectFront1 = new DBDiff.Schema.MySQL.Front.MySqlConnectFront();
-            this.mySqlConnectFront1.Location = new System.Drawing.Point(5, 19);
-            this.mySqlConnectFront1.Name = "mySqlConnectFront1";
-            this.mySqlConnectFront1.Size = new System.Drawing.Size(420, 190);
-            this.mySqlConnectFront1.TabIndex = 10;
-            this.mySqlConnectFront2.Location = new System.Drawing.Point(5, 19);
-            this.mySqlConnectFront2.Name = "mySqlConnectFront2";
-            this.mySqlConnectFront2.Size = new System.Drawing.Size(420, 190);
-            this.mySqlConnectFront2.TabIndex = 10;
-            this.mySqlConnectFront1.Visible = true;
-            this.mySqlConnectFront2.Visible = true;
-            this.groupBox3.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront2);
-            this.groupBox2.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront1);
-        }
-        */
 
         private void ShowSQL2005()
         {
@@ -296,45 +263,6 @@ namespace DBDiff.Front
             ((SqlServerConnectFront) mySqlConnectFront2).DatabaseIndex = 2;
             PanelDestination.Controls.Add((Control) mySqlConnectFront2);
             PanelSource.Controls.Add((Control) mySqlConnectFront1);
-        }
-
-        private void optSQL2005_CheckedChanged(object sender, EventArgs e)
-        {
-            if (optSQL2005.Checked)
-            {
-                ShowSQL2005();
-            }
-            else
-            {
-                PanelSource.Controls.Remove((Control) mySqlConnectFront1);
-                PanelDestination.Controls.Remove((Control) mySqlConnectFront2);
-            }
-        }
-
-        private void optSybase_CheckedChanged(object sender, EventArgs e)
-        {
-            /*if (optSybase.Checked)
-            {
-                this.mySqlConnectFront2 = new DBDiff.Schema.Sybase.Front.AseConnectFront();
-                this.mySqlConnectFront1 = new DBDiff.Schema.Sybase.Front.AseConnectFront();
-                this.mySqlConnectFront1.Location = new System.Drawing.Point(5, 19);
-                this.mySqlConnectFront1.Name = "mySqlConnectFront1";
-                this.mySqlConnectFront1.Size = new System.Drawing.Size(410, 214);
-                this.mySqlConnectFront1.TabIndex = 10;
-                this.mySqlConnectFront2.Location = new System.Drawing.Point(5, 19);
-                this.mySqlConnectFront2.Name = "mySqlConnectFront2";
-                this.mySqlConnectFront2.Size = new System.Drawing.Size(410, 214);
-                this.mySqlConnectFront2.TabIndex = 10;
-                this.mySqlConnectFront1.Visible = true;
-                this.mySqlConnectFront2.Visible = true;
-                this.groupBox3.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront2);
-                this.groupBox2.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront1);
-            }
-            else
-            {
-                this.groupBox2.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront1);
-                this.groupBox3.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront2);
-            }*/
         }
 
         private void btnSaveAs_Click(object sender, EventArgs e)
@@ -373,11 +301,7 @@ namespace DBDiff.Front
 
         private void panel2_Resize(object sender, EventArgs e)
         {
-        }
 
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            panel2.Left = (Width - panel2.Width)/2;
         }
 
         private void button1_Click_1(object sender, EventArgs e)
