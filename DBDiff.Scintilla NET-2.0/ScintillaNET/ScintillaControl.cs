@@ -16,7 +16,7 @@ namespace DBDiff.Scintilla
 	[DefaultBindingProperty("Text"), DefaultProperty("Text"), DefaultEvent("DocumentChanged")]
 	public partial class Scintilla : System.Windows.Forms.Control, INativeScintilla, ISupportInitialize
 	{
-		public const string DefaultDllName = "SciLexer.dll";
+		public const string DefaultDllName = "DbDiff.SciLexer.dll";
 		private string _sciLexerDllName = null;
 		
 
@@ -30,14 +30,13 @@ namespace DBDiff.Scintilla
 		#endregion
 
 		#region Constructor / Dispose
-		public Scintilla()
-            : this(DefaultDllName)
-        {
-        }
 
-		public Scintilla(string sciLexerDllName)
+		public Scintilla()
 		{
-			_sciLexerDllName = sciLexerDllName;
+			if (IntPtr.Size == 4)
+                _sciLexerDllName = "DbDiff.SciLexer32.dll";
+            else
+                _sciLexerDllName = "DbDiff.SciLexer64.dll";
 			_ns = (INativeScintilla)this;
 
 			// Set up default encoding
