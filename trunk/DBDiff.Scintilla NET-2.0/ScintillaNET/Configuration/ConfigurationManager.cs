@@ -357,10 +357,10 @@ namespace DBDiff.Scintilla.Configuration
 
 			if (_isBuiltInEnabled)
 			{
-				using(Stream s = GetType().Assembly.GetManifestResourceStream("ScintillaNet.Configuration.Builtin.default.xml"))
+                using (Stream s = GetType().Assembly.GetManifestResourceStream("DBDiff.Scintilla.Configuration.Builtin.default.xml"))
 					builtInDefault = new Configuration(s, "default", _useXmlReader);
 				if (!string.IsNullOrEmpty(_language))
-					using (Stream s = GetType().Assembly.GetManifestResourceStream("ScintillaNet.Configuration.Builtin." + _language + ".xml"))
+                    using (Stream s = GetType().Assembly.GetManifestResourceStream("DBDiff.Scintilla.Configuration.Builtin." + _language + ".xml"))
 						if (s != null)
 							builtInLang = new Configuration(s, _language, _useXmlReader);
 			}

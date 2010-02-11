@@ -241,7 +241,7 @@ namespace DBDiff.Scintilla
 
 			string lexname = this.Lexer.ToString().ToLower();
 
-			using (Stream s = GetType().Assembly.GetManifestResourceStream("ScintillaNet.Configuration.Builtin.LexerStyleNames." + lexname + ".txt"))
+            using (Stream s = GetType().Assembly.GetManifestResourceStream("DBDiff.Scintilla.Configuration.Builtin.LexerStyleNames." + lexname + ".txt"))
 			{
 				if (s == null)
 					return;
