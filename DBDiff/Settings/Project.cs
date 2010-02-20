@@ -5,6 +5,8 @@ using System.Text;
 using System.Data;
 using DBDiff.Schema.SQLServer.Generates.Options;
 using System.Data.SqlServerCe;
+using System.IO;
+using System.Reflection;
 
 namespace DBDiff.Settings
 {
@@ -19,7 +21,8 @@ namespace DBDiff.Settings
             SQLServer = 1
         }
 
-        private const string connectionString = "Data Source=Database.sdf";
+        private static string connectionString = string.Format("Data Source={0}\\Database.sdf", Path.GetDirectoryName(Assembly.GetCallingAssembly().Location));
+
         public int Id { get; set; }
         public string ConnectionStringSource { get; set; }
         public string ConnectionStringDestination { get; set; }
