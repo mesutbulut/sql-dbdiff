@@ -106,13 +106,20 @@ namespace DBDiff.Front
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
-            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (FilterMissingObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (FilterNewObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDiferentObjects)) return true;
-            return true;
+            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (FilterMissingObjects)) 
+                return true;
+            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (FilterNewObjects)) 
+                return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDiferentObjects)) 
+                return true;
+            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDiferentObjects)) 
+                return true;
+            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDiferentObjects)) 
+                return true;
+            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDiferentObjects)) 
+                return true;
+
+            return false;
         }
 
         public Boolean FilterNewObjects

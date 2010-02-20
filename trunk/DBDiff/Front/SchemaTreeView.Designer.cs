@@ -77,7 +77,7 @@
             this.chkOld.AutoSize = true;
             this.chkOld.Checked = true;
             this.chkOld.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkOld.Enabled = false;
+            //this.chkOld.Enabled = false;
             this.chkOld.Location = new System.Drawing.Point(4, 4);
             this.chkOld.Name = "chkOld";
             this.chkOld.Size = new System.Drawing.Size(125, 17);
@@ -91,7 +91,7 @@
             this.chkNew.AutoSize = true;
             this.chkNew.Checked = true;
             this.chkNew.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkNew.Enabled = false;
+            //this.chkNew.Enabled = false;
             this.chkNew.Location = new System.Drawing.Point(4, 27);
             this.chkNew.Name = "chkNew";
             this.chkNew.Size = new System.Drawing.Size(112, 17);
@@ -105,7 +105,7 @@
             this.chkDiferent.AutoSize = true;
             this.chkDiferent.Checked = true;
             this.chkDiferent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDiferent.Enabled = false;
+            //this.chkDiferent.Enabled = false;
             this.chkDiferent.Location = new System.Drawing.Point(135, 4);
             this.chkDiferent.Name = "chkDiferent";
             this.chkDiferent.Size = new System.Drawing.Size(130, 17);
