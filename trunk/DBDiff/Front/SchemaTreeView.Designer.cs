@@ -77,12 +77,11 @@
             this.chkOld.AutoSize = true;
             this.chkOld.Checked = true;
             this.chkOld.CheckState = System.Windows.Forms.CheckState.Checked;
-            //this.chkOld.Enabled = false;
             this.chkOld.Location = new System.Drawing.Point(4, 4);
             this.chkOld.Name = "chkOld";
-            this.chkOld.Size = new System.Drawing.Size(125, 17);
+            this.chkOld.Size = new System.Drawing.Size(130, 17);
             this.chkOld.TabIndex = 1;
-            this.chkOld.Text = "Filter Missing Objects";
+            this.chkOld.Text = "Show Missing Objects";
             this.chkOld.UseVisualStyleBackColor = true;
             this.chkOld.CheckedChanged += new System.EventHandler(this.chkOld_CheckedChanged);
             // 
@@ -91,12 +90,11 @@
             this.chkNew.AutoSize = true;
             this.chkNew.Checked = true;
             this.chkNew.CheckState = System.Windows.Forms.CheckState.Checked;
-            //this.chkNew.Enabled = false;
             this.chkNew.Location = new System.Drawing.Point(4, 27);
             this.chkNew.Name = "chkNew";
-            this.chkNew.Size = new System.Drawing.Size(112, 17);
+            this.chkNew.Size = new System.Drawing.Size(117, 17);
             this.chkNew.TabIndex = 2;
-            this.chkNew.Text = "Filter New Objects";
+            this.chkNew.Text = "Show New Objects";
             this.chkNew.UseVisualStyleBackColor = true;
             this.chkNew.CheckedChanged += new System.EventHandler(this.chkNew_CheckedChanged);
             // 
@@ -105,12 +103,11 @@
             this.chkDiferent.AutoSize = true;
             this.chkDiferent.Checked = true;
             this.chkDiferent.CheckState = System.Windows.Forms.CheckState.Checked;
-            //this.chkDiferent.Enabled = false;
             this.chkDiferent.Location = new System.Drawing.Point(135, 4);
             this.chkDiferent.Name = "chkDiferent";
-            this.chkDiferent.Size = new System.Drawing.Size(130, 17);
+            this.chkDiferent.Size = new System.Drawing.Size(135, 17);
             this.chkDiferent.TabIndex = 3;
-            this.chkDiferent.Text = "Filter Different Objects";
+            this.chkDiferent.Text = "Show Different Objects";
             this.chkDiferent.UseVisualStyleBackColor = true;
             this.chkDiferent.CheckedChanged += new System.EventHandler(this.chkDiferent_CheckedChanged);
             // 
