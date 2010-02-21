@@ -51,12 +51,12 @@ namespace DBDiff.Front
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtDiferencias = new DBDiff.Scintilla.Scintilla();
+            this.btnSaveAs = new System.Windows.Forms.Button();
+            this.btnCopy = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.btnOptions = new System.Windows.Forms.Button();
-            this.btnCopy = new System.Windows.Forms.Button();
-            this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
             this.btnNewProject = new System.Windows.Forms.Button();
             this.PanelDestination = new System.Windows.Forms.Panel();
@@ -249,7 +249,7 @@ namespace DBDiff.Front
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(838, 455);
+            this.tabPage5.Size = new System.Drawing.Size(650, 455);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Old object";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -261,7 +261,7 @@ namespace DBDiff.Front
             this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtOldObject.Location = new System.Drawing.Point(3, 3);
             this.txtOldObject.Name = "txtOldObject";
-            this.txtOldObject.Size = new System.Drawing.Size(832, 449);
+            this.txtOldObject.Size = new System.Drawing.Size(644, 449);
             this.txtOldObject.TabIndex = 0;
             // 
             // tabDiff
@@ -270,7 +270,7 @@ namespace DBDiff.Front
             this.tabDiff.Location = new System.Drawing.Point(4, 22);
             this.tabDiff.Name = "tabDiff";
             this.tabDiff.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDiff.Size = new System.Drawing.Size(838, 455);
+            this.tabDiff.Size = new System.Drawing.Size(650, 455);
             this.tabDiff.TabIndex = 2;
             this.tabDiff.Text = "Visual Diff";
             this.tabDiff.UseVisualStyleBackColor = true;
@@ -281,7 +281,7 @@ namespace DBDiff.Front
             this.diffControl.Location = new System.Drawing.Point(3, 3);
             this.diffControl.Name = "diffControl";
             this.diffControl.ShowWhitespaceInLineDiff = true;
-            this.diffControl.Size = new System.Drawing.Size(832, 449);
+            this.diffControl.Size = new System.Drawing.Size(644, 449);
             this.diffControl.TabIndex = 0;
             this.diffControl.ViewFont = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             // 
@@ -294,7 +294,7 @@ namespace DBDiff.Front
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1278, 490);
+            this.tabPage1.Size = new System.Drawing.Size(998, 490);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Synchronized Script";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -322,13 +322,43 @@ namespace DBDiff.Front
             this.txtDiferencias.Styles.LineNumber.IsVisible = false;
             this.txtDiferencias.TabIndex = 0;
             // 
+            // btnSaveAs
+            // 
+            this.btnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveAs.Enabled = false;
+            this.btnSaveAs.Image = global::DBDiff.Properties.Resources.Floppy;
+            this.btnSaveAs.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnSaveAs.Location = new System.Drawing.Point(1180, 3);
+            this.btnSaveAs.Name = "btnSaveAs";
+            this.btnSaveAs.Size = new System.Drawing.Size(95, 55);
+            this.btnSaveAs.TabIndex = 6;
+            this.btnSaveAs.Text = "Save As";
+            this.btnSaveAs.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnSaveAs.UseVisualStyleBackColor = true;
+            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
+            // 
+            // btnCopy
+            // 
+            this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopy.Enabled = false;
+            this.btnCopy.Image = global::DBDiff.Properties.Resources.Copy;
+            this.btnCopy.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnCopy.Location = new System.Drawing.Point(1180, 64);
+            this.btnCopy.Name = "btnCopy";
+            this.btnCopy.Size = new System.Drawing.Size(95, 55);
+            this.btnCopy.TabIndex = 7;
+            this.btnCopy.Text = "Copy Clipboard";
+            this.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCopy.UseVisualStyleBackColor = true;
+            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.textBox1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1278, 490);
+            this.tabPage3.Size = new System.Drawing.Size(998, 490);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Actions Report";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -364,36 +394,6 @@ namespace DBDiff.Front
             this.btnOptions.UseVisualStyleBackColor = true;
             this.btnOptions.Click += new System.EventHandler(this.btnOptions_Click);
             // 
-            // btnCopy
-            // 
-            this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopy.Enabled = false;
-            this.btnCopy.Image = global::DBDiff.Properties.Resources.Copy;
-            this.btnCopy.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnCopy.Location = new System.Drawing.Point(1180, 64);
-            this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(95, 55);
-            this.btnCopy.TabIndex = 7;
-            this.btnCopy.Text = "Copy Clipboard";
-            this.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnCopy.UseVisualStyleBackColor = true;
-            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
-            // btnSaveAs
-            // 
-            this.btnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveAs.Enabled = false;
-            this.btnSaveAs.Image = global::DBDiff.Properties.Resources.Floppy;
-            this.btnSaveAs.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnSaveAs.Location = new System.Drawing.Point(1180, 3);
-            this.btnSaveAs.Name = "btnSaveAs";
-            this.btnSaveAs.Size = new System.Drawing.Size(95, 55);
-            this.btnSaveAs.TabIndex = 6;
-            this.btnSaveAs.Text = "Save As";
-            this.btnSaveAs.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSaveAs.UseVisualStyleBackColor = true;
-            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
-            // 
             // btnCompare
             // 
             this.btnCompare.Image = global::DBDiff.Properties.Resources.Compare;
@@ -405,7 +405,7 @@ namespace DBDiff.Front
             this.btnCompare.Text = "Compare";
             this.btnCompare.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCompare.UseVisualStyleBackColor = true;
-            this.btnCompare.Click += new System.EventHandler(this.button1_Click);
+            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
             // 
             // btnNewProject
             // 
@@ -447,7 +447,7 @@ namespace DBDiff.Front
             this.btnSaveProject.TabIndex = 13;
             this.btnSaveProject.Text = "Save Project";
             this.btnSaveProject.UseVisualStyleBackColor = true;
-            this.btnSaveProject.Click += new System.EventHandler(this.button1_Click_1);
+            this.btnSaveProject.Click += new System.EventHandler(this.btnSaveProject_Click);
             // 
             // btnProject
             // 
@@ -493,7 +493,7 @@ namespace DBDiff.Front
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PrincipalForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.Form_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);

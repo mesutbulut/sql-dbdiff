@@ -12,33 +12,25 @@ using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Settings;
 using Menees.DiffUtils;
 using System.Collections.Generic;
-/*using DBDiff.Schema.SQLServer2000;
-using DBDiff.Schema.SQLServer2000.Model;
-using DBDiff.Schema.SQLServer2000.Compare;
-/*using DBDiff.Schema.Sybase;
-using DBDiff.Schema.Sybase.Options;
-using DBDiff.Schema.Sybase.Model;*/
-
-/*using DBDiff.Schema.MySQL;
-using DBDiff.Schema.MySQL.Options;
-using DBDiff.Schema.MySQL.Model;
-*/
 
 namespace DBDiff.Front
 {
     public partial class PrincipalForm : Form
     {
-        //private MySqlOption MySQLfilter = new MySqlOption();
-        //private AseOption AseFilter = new AseOption();
-
+        #region Private Variables
         private Project ActiveProject;
         private IFront mySqlConnectFront1;
         private IFront mySqlConnectFront2;
-        private readonly SqlOption SqlFilter = new SqlOption();
+        private readonly SqlOption SqlFilter;
+        #endregion
 
+        #region Constructor
         public PrincipalForm()
         {
             InitializeComponent();
+            SqlFilter = new SqlOption();
+
+
             ShowSQL2005();
             txtNewObject.ConfigurationManager.Language = "mssql";
             txtNewObject.IsReadOnly = false;
@@ -55,50 +47,10 @@ namespace DBDiff.Front
                 mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
             }
         }
+        #endregion
 
-        /*private void ProcesarSybase()
-        {
-            DBDiff.Schema.Sybase.Model.Database origen;
-            DBDiff.Schema.Sybase.Model.Database destino;
-
-            DBDiff.Schema.Sybase.Generate sql = new DBDiff.Schema.Sybase.Generate();
-            sql.ConnectioString = txtConnectionOrigen.Text;
-            
-            AseFilter.OptionFilter.FilterTrigger = false;
-
-            origen = sql.Process(AseFilter);
-
-            sql.ConnectioString = txtConnectionDestino.Text;
-            destino = sql.Process(AseFilter);
-
-            this.txtScript.SQLType = SQLEnum.SQLTypeEnum.Sybase;
-            this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.Sybase;
-            //origen = DBDiff.Schema.Sybase.Generate.Compare(origen, destino);
-
-            this.txtScript.Text = origen.ToSQL();
-            //this.txtDiferencias.Text = origen.ToSQLDiff();
-        }*/
-
-        /*private void ProcesarMySQL()
-        {
-            DBDiff.Schema.MySQL.Model.Database origen;
-            DBDiff.Schema.MySQL.Model.Database destino;
-
-            DBDiff.Schema.MySQL.Generate sql = new DBDiff.Schema.MySQL.Generate();
-            sql.ConnectioString = mySqlConnectFront1.ConnectionString;
-            origen = sql.Process(MySQLfilter);
-
-            sql.ConnectioString = mySqlConnectFront2.ConnectionString;
-            destino = sql.Process(MySQLfilter);
-
-            //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.MySQL;
-            //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.MySQL;
-            origen = DBDiff.Schema.MySQL.Generate.Compare(origen, destino);
-            this.txtDiferencias.Text = origen.ToSQLDiff();
-        }
-        */
-
-        private void ProcesarSQL2005()
+        #region Private Methods
+        private void ProcessMsSQL()
         {
             try
             {
@@ -150,6 +102,46 @@ namespace DBDiff.Front
                                           ex.Message);
             }
         }
+        private void ShowSQL2005()
+        {
+            mySqlConnectFront2 = new SqlServerConnectFront();
+            mySqlConnectFront1 = new SqlServerConnectFront();
+            mySqlConnectFront1.Location = new Point(1, 1);
+            mySqlConnectFront1.Name = "mySqlConnectFront1";
+            mySqlConnectFront1.Anchor =
+                (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
+
+            mySqlConnectFront1.TabIndex = 10;
+            mySqlConnectFront1.Text = "Source Database:";
+            mySqlConnectFront2.Location = new Point(1, 1);
+            mySqlConnectFront2.Name = "mySqlConnectFront2";
+            mySqlConnectFront2.Anchor =
+                (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
+            mySqlConnectFront2.TabIndex = 10;
+            mySqlConnectFront1.Visible = true;
+            mySqlConnectFront2.Visible = true;
+            mySqlConnectFront2.Text = "Destination Database:";
+            ((SqlServerConnectFront)mySqlConnectFront1).UserName = "sa";
+            ((SqlServerConnectFront)mySqlConnectFront1).Password = "";
+            ((SqlServerConnectFront)mySqlConnectFront1).ServerName = "(local)";
+            ((SqlServerConnectFront)mySqlConnectFront2).UserName = "sa";
+            ((SqlServerConnectFront)mySqlConnectFront2).Password = "";
+            ((SqlServerConnectFront)mySqlConnectFront2).ServerName = "(local)";
+            ((SqlServerConnectFront)mySqlConnectFront1).DatabaseIndex = 1;
+            ((SqlServerConnectFront)mySqlConnectFront2).DatabaseIndex = 2;
+            PanelDestination.Controls.Add((Control)mySqlConnectFront2);
+            PanelSource.Controls.Add((Control)mySqlConnectFront1);
+        }
+        #endregion
+
+        #region Form/Control Events
+        private void Form_Load(object sender, EventArgs e)
+        {
+            //Set the Title of the form
+            this.Text = string.Format("SQL-DBDiff v{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            txtDiferencias.Text = "";
+        }
 
         private void schemaTreeView1_OnSelectItem(string ObjectFullName)
         {
@@ -189,82 +181,6 @@ namespace DBDiff.Front
             }
         }
 
-        /*private void ProcesarSQL2000()
-        {
-            DBDiff.Schema.SQLServer2000.Model.Database origen;
-            DBDiff.Schema.SQLServer2000.Model.Database destino;
-
-            DBDiff.Schema.SQLServer2000.Generate sql = new DBDiff.Schema.SQLServer2000.Generate();
-
-            lblMessage.Text = "Leyendo tablas de origen...";
-            sql.OnTableProgress += new Progress.ProgressHandler(sql_OnTableProgress);
-            //sql.ConnectioString = txtConnectionOrigen.Text;
-            origen = sql.Process();
-
-            //sql.ConnectioString = txtConnectionDestino.Text;
-            lblMessage.Text = "Leyendo tablas de destino...";
-            destino = sql.Process();
-
-            origen = DBDiff.Schema.SQLServer2000.Generate.Compare(origen, destino);
-            //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-            //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-            this.txtDiferencias.Text = origen.ToSQLDiff();
-            
-
-        }
-        */
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-                
-                ProcesarSQL2005();
-                
-                Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(Owner, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-        }
-
-        private void ShowSQL2005()
-        {
-            mySqlConnectFront2 = new SqlServerConnectFront();
-            mySqlConnectFront1 = new SqlServerConnectFront();
-            mySqlConnectFront1.Location = new Point(1, 1);
-            mySqlConnectFront1.Name = "mySqlConnectFront1";
-            mySqlConnectFront1.Anchor =
-                (AnchorStyles) ((int) AnchorStyles.Bottom + (int) AnchorStyles.Left + (int) AnchorStyles.Right);
-
-            mySqlConnectFront1.TabIndex = 10;
-            mySqlConnectFront1.Text = "Source Database:";
-            mySqlConnectFront2.Location = new Point(1, 1);
-            mySqlConnectFront2.Name = "mySqlConnectFront2";
-            mySqlConnectFront2.Anchor =
-                (AnchorStyles) ((int) AnchorStyles.Bottom + (int) AnchorStyles.Left + (int) AnchorStyles.Right);
-            mySqlConnectFront2.TabIndex = 10;
-            mySqlConnectFront1.Visible = true;
-            mySqlConnectFront2.Visible = true;
-            mySqlConnectFront2.Text = "Destination Database:";
-            ((SqlServerConnectFront) mySqlConnectFront1).UserName = "sa";
-            ((SqlServerConnectFront) mySqlConnectFront1).Password = "";
-            ((SqlServerConnectFront) mySqlConnectFront1).ServerName = "(local)";
-            ((SqlServerConnectFront) mySqlConnectFront2).UserName = "sa";
-            ((SqlServerConnectFront) mySqlConnectFront2).Password = "";
-            ((SqlServerConnectFront) mySqlConnectFront2).ServerName = "(local)";
-            ((SqlServerConnectFront) mySqlConnectFront1).DatabaseIndex = 1;
-            ((SqlServerConnectFront) mySqlConnectFront2).DatabaseIndex = 2;
-            PanelDestination.Controls.Add((Control) mySqlConnectFront2);
-            PanelSource.Controls.Add((Control) mySqlConnectFront1);
-        }
-
         private void btnSaveAs_Click(object sender, EventArgs e)
         {
             try
@@ -292,41 +208,6 @@ namespace DBDiff.Front
         {
             OptionForm form = new OptionForm();
             form.Show(Owner, SqlFilter);
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            //Set the Title of the form
-            this.Text = string.Format("SQL-DBDiff v{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
-            txtDiferencias.Text = "";
-        }
-
-        private void panel2_Resize(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            try
-            {
-                if (ActiveProject == null)
-                {
-                    ActiveProject = new Project
-                                        {
-                                            ConnectionStringSource = mySqlConnectFront1.ConnectionString,
-                                            ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
-                                            Name = mySqlConnectFront1.DatabaseName + " - " + mySqlConnectFront2.DatabaseName,
-                                            Type = Project.ProjectType.SQLServer
-                                        };
-                }
-                ActiveProject.Id = Project.Save(ActiveProject);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void btnProject_Click(object sender, EventArgs e)
@@ -401,5 +282,48 @@ namespace DBDiff.Front
             mySqlConnectFront2.ConnectionString = "";
             ActiveProject = null;
         }
+
+        private void btnCompare_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                ProcessMsSQL();
+
+                Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Owner, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void btnSaveProject_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ActiveProject == null)
+                {
+                    ActiveProject = new Project
+                    {
+                        ConnectionStringSource = mySqlConnectFront1.ConnectionString,
+                        ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
+                        Name = mySqlConnectFront1.DatabaseName + " - " + mySqlConnectFront2.DatabaseName,
+                        Type = Project.ProjectType.SQLServer
+                    };
+                }
+                ActiveProject.Id = Project.Save(ActiveProject);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
     }
 }
