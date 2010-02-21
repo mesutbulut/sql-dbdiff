@@ -296,6 +296,9 @@ namespace DBDiff.Front
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Set the Title of the form
+            this.Text = string.Format("SQL-DBDiff v{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
             txtDiferencias.Text = "";
         }
 
