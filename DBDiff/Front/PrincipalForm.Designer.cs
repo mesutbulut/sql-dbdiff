@@ -1,3 +1,4 @@
+using System.Reflection;
 namespace DBDiff.Front
 {
     partial class PrincipalForm
@@ -494,7 +495,7 @@ namespace DBDiff.Front
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PrincipalForm";
-            this.Text = "Open DBDiff Beta 8.5";
+            this.Text = string.Format("SQL-DBDiff v", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
