@@ -35,6 +35,7 @@
             this.chkOld = new System.Windows.Forms.CheckBox();
             this.chkNew = new System.Windows.Forms.CheckBox();
             this.chkDiferent = new System.Windows.Forms.CheckBox();
+            this.chkShowExistingObjects = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // treeView1
@@ -77,7 +78,7 @@
             this.chkOld.AutoSize = true;
             this.chkOld.Checked = true;
             this.chkOld.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkOld.Location = new System.Drawing.Point(4, 4);
+            this.chkOld.Location = new System.Drawing.Point(135, 27);
             this.chkOld.Name = "chkOld";
             this.chkOld.Size = new System.Drawing.Size(130, 17);
             this.chkOld.TabIndex = 1;
@@ -111,10 +112,24 @@
             this.chkDiferent.UseVisualStyleBackColor = true;
             this.chkDiferent.CheckedChanged += new System.EventHandler(this.chkDiferent_CheckedChanged);
             // 
+            // chkShowExistingObjects
+            // 
+            this.chkShowExistingObjects.AutoSize = true;
+            this.chkShowExistingObjects.Checked = true;
+            this.chkShowExistingObjects.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkShowExistingObjects.Location = new System.Drawing.Point(4, 4);
+            this.chkShowExistingObjects.Name = "chkShowExistingObjects";
+            this.chkShowExistingObjects.Size = new System.Drawing.Size(131, 17);
+            this.chkShowExistingObjects.TabIndex = 4;
+            this.chkShowExistingObjects.Text = "Show Existing Objects";
+            this.chkShowExistingObjects.UseVisualStyleBackColor = true;
+            this.chkShowExistingObjects.CheckedChanged += new System.EventHandler(this.chkShowExistingObjects_CheckedChanged);
+            // 
             // SchemaTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkShowExistingObjects);
             this.Controls.Add(this.chkDiferent);
             this.Controls.Add(this.chkNew);
             this.Controls.Add(this.chkOld);
@@ -133,5 +148,6 @@
         private System.Windows.Forms.CheckBox chkNew;
         private System.Windows.Forms.CheckBox chkDiferent;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.CheckBox chkShowExistingObjects;
     }
 }

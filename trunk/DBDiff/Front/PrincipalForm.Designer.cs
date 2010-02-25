@@ -469,9 +469,9 @@ namespace DBDiff.Front
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.schemaTreeView1.DatabaseDestination = null;
             this.schemaTreeView1.DatabaseSource = null;
-            this.schemaTreeView1.FilterDiferentObjects = true;
-            this.schemaTreeView1.FilterMissingObjects = true;
-            this.schemaTreeView1.FilterNewObjects = true;
+            this.schemaTreeView1.ShowDiferentObjects = true;
+            this.schemaTreeView1.ShowMissingObjects = true;
+            this.schemaTreeView1.ShowNewObjects = true;
             this.schemaTreeView1.Location = new System.Drawing.Point(0, 35);
             this.schemaTreeView1.Name = "schemaTreeView1";
             this.schemaTreeView1.Size = new System.Drawing.Size(317, 446);
