@@ -125,38 +125,51 @@ namespace DBDiff.Front
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
-            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (FilterMissingObjects))
+            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (ShowMissingObjects))
                 return true;
-            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (FilterNewObjects))
+            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (ShowNewObjects))
                 return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDiferentObjects))
+            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (ShowDiferentObjects))
                 return true;
-            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDiferentObjects))
+            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (ShowDiferentObjects))
                 return true;
-            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDiferentObjects))
+            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (ShowDiferentObjects))
                 return true;
-            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDiferentObjects))
+            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (ShowDiferentObjects))
+                return true;
+            if ((item.Status == Enums.ObjectStatusType.OriginalStatus) && (ShowExistingObjects))
                 return true;
 
             return false;
         }
 
-        public Boolean FilterNewObjects
+        public Boolean ShowExistingObjects
+        {
+            get { return chkShowExistingObjects.Checked; }
+            set { chkShowExistingObjects.Checked = value; }
+        }
+
+        public Boolean ShowNewObjects
         {
             get { return chkNew.Checked; }
             set { chkNew.Checked = value; }
         }
 
-        public Boolean FilterMissingObjects
+        public Boolean ShowMissingObjects
         {
             get { return chkOld.Checked; }
             set { chkOld.Checked = value; }
         }
 
-        public Boolean FilterDiferentObjects
+        public Boolean ShowDiferentObjects
         {
             get { return chkDiferent.Checked; }
             set { chkDiferent.Checked = value; }
+        }
+
+        private void chkShowExistingObjects_CheckedChanged(object sender, EventArgs e)
+        {
+            RebuildSchemaTree();
         }
 
         private void chkDiferent_CheckedChanged(object sender, EventArgs e)
