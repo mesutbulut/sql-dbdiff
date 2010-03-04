@@ -51,8 +51,7 @@ namespace DBDiff.Front
 
         private void OpenProject()
         {
-            try
-            {
+            
                 if (listView1.SelectedItems.Count != 0)
                 {
                     Project item = new Project();
@@ -64,18 +63,12 @@ namespace DBDiff.Front
                     item.Type = projects[listView1.SelectedItems[0].Index].Type;
                     if (OnSelect != null)
                         OnSelect(item);
-                }                            
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+                }                                     
         }
 
         private void DeleteProject()
         {
-            try
-            {
+           
                 if (listView1.SelectedItems.Count != 0)
                 {
                     DialogResult result = MessageBox.Show(this,
@@ -90,11 +83,6 @@ namespace DBDiff.Front
                         listView1.Items.Remove(listView1.SelectedItems[0]);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
         }
 
         private void mnuItemRename_Click(object sender, EventArgs e)

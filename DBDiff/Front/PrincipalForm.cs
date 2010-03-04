@@ -72,8 +72,7 @@ namespace DBDiff.Front
                     btnSaveAs.Enabled = true;
                 }
                 else
-                    MessageBox.Show(Owner, "Please select a valid connection string", "ERROR", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
+                    MessageBox.Show(Owner, "Please select a valid connection string", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (SchemaException)
             {
@@ -182,19 +181,12 @@ namespace DBDiff.Front
 
         private void btnSaveAs_Click(object sender, EventArgs e)
         {
-            try
+            saveFileDialog1.ShowDialog(Owner);
+            if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
             {
-                saveFileDialog1.ShowDialog(Owner);
-                if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
-                {
-                    StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false);
-                    writer.Write(txtDiferencias.Text);
-                    writer.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false);
+                writer.Write(txtDiferencias.Text);
+                writer.Close();
             }
         }
 
@@ -211,68 +203,46 @@ namespace DBDiff.Front
 
         private void btnProject_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ListProjectsForm form = new ListProjectsForm(Project.GetAll());
-                form.OnSelect += new ListProjectHandler(form_OnSelect);
-                form.OnDelete += new ListProjectHandler(form_OnDelete);
-                form.OnRename += new ListProjectHandler(form_OnRename);
-                form.ShowDialog(this);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+            ListProjectsForm form = new ListProjectsForm(Project.GetAll());
+            form.OnSelect += new ListProjectHandler(form_OnSelect);
+            form.OnDelete += new ListProjectHandler(form_OnDelete);
+            form.OnRename += new ListProjectHandler(form_OnRename);
+            form.ShowDialog(this);
         }
 
         private void form_OnRename(Project itemSelected)
         {
-            try
-            {
-                Project.Save(itemSelected);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+            Project.Save(itemSelected);
         }
 
         private void form_OnDelete(Project itemSelected)
         {
-            try
+
+            Project.Delete(itemSelected.Id);
+            if (ActiveProject != null)
             {
-                Project.Delete(itemSelected.Id);
-                if (ActiveProject != null)
+                if (ActiveProject.Id == itemSelected.Id)
                 {
-                    if (ActiveProject.Id == itemSelected.Id)
-                    {
-                        ActiveProject = null;
-                        mySqlConnectFront1.ConnectionString = "";
-                        mySqlConnectFront2.ConnectionString = "";
-                    }
+                    ActiveProject = null;
+                    mySqlConnectFront1.ConnectionString = "";
+                    mySqlConnectFront2.ConnectionString = "";
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
         }
 
         private void form_OnSelect(Project itemSelected)
         {
-            try
+
+            if (itemSelected != null)
             {
-                if (itemSelected != null)
-                {
-                    ActiveProject = itemSelected;
-                    mySqlConnectFront1.ConnectionString = itemSelected.ConnectionStringSource;
-                    mySqlConnectFront2.ConnectionString = itemSelected.ConnectionStringDestination;
-                }
+                ActiveProject = itemSelected;
+                mySqlConnectFront1.ConnectionString = itemSelected.ConnectionStringSource;
+                mySqlConnectFront2.ConnectionString = itemSelected.ConnectionStringDestination;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
         }
 
         private void btnNewProject_Click(object sender, EventArgs e)
@@ -294,7 +264,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Owner, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw ex;
             }
             finally
             {
@@ -304,24 +274,19 @@ namespace DBDiff.Front
 
         private void btnSaveProject_Click(object sender, EventArgs e)
         {
-            try
+
+            if (ActiveProject == null)
             {
-                if (ActiveProject == null)
+                ActiveProject = new Project
                 {
-                    ActiveProject = new Project
-                    {
-                        ConnectionStringSource = mySqlConnectFront1.ConnectionString,
-                        ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
-                        Name = mySqlConnectFront1.DatabaseName + " - " + mySqlConnectFront2.DatabaseName,
-                        Type = Project.ProjectType.SQLServer
-                    };
-                }
-                ActiveProject.Id = Project.Save(ActiveProject);
+                    ConnectionStringSource = mySqlConnectFront1.ConnectionString,
+                    ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
+                    Name = mySqlConnectFront1.DatabaseName + " - " + mySqlConnectFront2.DatabaseName,
+                    Type = Project.ProjectType.SQLServer
+                };
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            ActiveProject.Id = Project.Save(ActiveProject);
+
         }
         #endregion
     }
