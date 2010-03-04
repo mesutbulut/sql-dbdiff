@@ -223,9 +223,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                     isServerFilled = true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
             finally
             {
@@ -240,11 +240,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                 this.Cursor = Cursors.WaitCursor;
                 FillDatabase();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 this.Cursor = Cursors.Default;
                 cboDatabase.Items.Clear();
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
             finally
             {

@@ -13,9 +13,17 @@ namespace DBDiff
         [STAThread]
         static void Main()
         {
+            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new PrincipalForm());
+        }
+
+        static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            Front.Error errorDialog = new Error();
+            errorDialog.Exception = e.Exception;
+            errorDialog.ShowDialog();
         }
     }
 }

@@ -88,6 +88,12 @@
     <Compile Include="Front\DatabaseProgressControl.Designer.cs">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Front\Error.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Front\Error.Designer.cs">
+      <DependentUpon>Error.cs</DependentUpon>
+    </Compile>
     <Compile Include="Front\ListProjectsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -222,6 +228,9 @@
     <None Include="Resources\SaveProject.ico" />
     <None Include="Resources\Open.ico" />
     <None Include="Resources\OpenP.bmp" />
+    <EmbeddedResource Include="Front\Error.resx">
+      <DependentUpon>Error.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Front\ListProjectsForm.resx">
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </EmbeddedResource>
