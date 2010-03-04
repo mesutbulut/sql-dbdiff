@@ -29,23 +29,6 @@ namespace DBDiff.Front
         {
             InitializeComponent();
             SqlFilter = new SqlOption();
-
-
-            ShowSQL2005();
-            txtNewObject.ConfigurationManager.Language = "mssql";
-            txtNewObject.IsReadOnly = false;
-            txtNewObject.Styles.LineNumber.BackColor = Color.White;
-            txtNewObject.Styles.LineNumber.IsVisible = false;
-            txtOldObject.ConfigurationManager.Language = "mssql";
-            txtOldObject.IsReadOnly = false;
-            txtOldObject.Styles.LineNumber.BackColor = Color.White;
-            txtOldObject.Styles.LineNumber.IsVisible = false;
-            Project LastConfiguration = Project.GetLastConfiguration();
-            if (LastConfiguration != null)
-            {
-                mySqlConnectFront1.ConnectionString = LastConfiguration.ConnectionStringSource;
-                mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
-            }
         }
         #endregion
 
@@ -137,6 +120,22 @@ namespace DBDiff.Front
         #region Form/Control Events
         private void Form_Load(object sender, EventArgs e)
         {
+            ShowSQL2005();
+            txtNewObject.ConfigurationManager.Language = "mssql";
+            txtNewObject.IsReadOnly = false;
+            txtNewObject.Styles.LineNumber.BackColor = Color.White;
+            txtNewObject.Styles.LineNumber.IsVisible = false;
+            txtOldObject.ConfigurationManager.Language = "mssql";
+            txtOldObject.IsReadOnly = false;
+            txtOldObject.Styles.LineNumber.BackColor = Color.White;
+            txtOldObject.Styles.LineNumber.IsVisible = false;
+            Project LastConfiguration = Project.GetLastConfiguration();
+            if (LastConfiguration != null)
+            {
+                mySqlConnectFront1.ConnectionString = LastConfiguration.ConnectionStringSource;
+                mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
+            }
+
             //Set the Title of the form
             this.Text = string.Format("SQL-DBDiff v{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
@@ -150,14 +149,14 @@ namespace DBDiff.Front
             txtNewObject.Text = string.Empty;
             txtOldObject.Text = string.Empty;
 
-            Database database = (Database) schemaTreeView1.DatabaseSource;
+            Database database = (Database)schemaTreeView1.DatabaseSource;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.DropStatus)
                     txtNewObject.Text = database.Find(ObjectFullName).ToSql();
             }
 
-            database = (Database) schemaTreeView1.DatabaseDestination;
+            database = (Database)schemaTreeView1.DatabaseDestination;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.CreateStatus)
@@ -170,9 +169,9 @@ namespace DBDiff.Front
             if (!string.IsNullOrEmpty(txtNewObject.Text) && !string.IsNullOrEmpty(txtOldObject.Text))
             {
                 TextDiff textDiff = new TextDiff(HashType.HashCode, true, true);
-                
+
                 //Make 2 lists, containing every line from the old and the new sql queries
-                List<string> oldLines, newLines; 
+                List<string> oldLines, newLines;
                 newLines = new List<string>(txtNewObject.Text.Split('\n'));
                 oldLines = new List<string>(txtOldObject.Text.Split('\n'));
 
@@ -223,7 +222,7 @@ namespace DBDiff.Front
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void form_OnRename(Project itemSelected)
@@ -256,7 +255,7 @@ namespace DBDiff.Front
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void form_OnSelect(Project itemSelected)
@@ -273,7 +272,7 @@ namespace DBDiff.Front
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void btnNewProject_Click(object sender, EventArgs e)
