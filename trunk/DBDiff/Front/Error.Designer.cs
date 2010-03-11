@@ -46,11 +46,11 @@
             // 
             this.txtErrorLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtErrorLog.Location = new System.Drawing.Point(15, 25);
+            this.txtErrorLog.Location = new System.Drawing.Point(12, 25);
             this.txtErrorLog.Multiline = true;
             this.txtErrorLog.Name = "txtErrorLog";
             this.txtErrorLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtErrorLog.Size = new System.Drawing.Size(610, 408);
+            this.txtErrorLog.Size = new System.Drawing.Size(613, 408);
             this.txtErrorLog.TabIndex = 1;
             // 
             // lnkIssuePage
