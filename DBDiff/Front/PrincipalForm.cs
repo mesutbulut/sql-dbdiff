@@ -37,8 +37,8 @@ namespace DBDiff.Front
         {
             try
             {
-                Database origen;
-                Database destino;
+                Database origin;
+                Database destination;
 
                 if ((!String.IsNullOrEmpty(mySqlConnectFront1.DatabaseName) &&
                      (!String.IsNullOrEmpty(mySqlConnectFront2.DatabaseName))))
@@ -54,19 +54,18 @@ namespace DBDiff.Front
 
                     ProgressForm progres = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
                     progres.ShowDialog(this);
-                    origen = progres.Source;
-                    destino = progres.Destination;
+                    origin = progres.Source;
+                    destination = progres.Destination;
 
-                    txtDiferencias.ConfigurationManager.Language = "mssql";
-                    txtDiferencias.IsReadOnly = false;
-                    txtDiferencias.Styles.LineNumber.BackColor = Color.White;
-                    txtDiferencias.Styles.LineNumber.IsVisible = false;
-                    txtDiferencias.Text = destino.ToSqlDiff().ToSQL();
-                    txtDiferencias.IsReadOnly = true;
-                    schemaTreeView1.DatabaseSource = destino;
-                    schemaTreeView1.DatabaseDestination = origen;
-                    schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
-                    textBox1.Text = origen.ActionMessage.Message;
+                    txtDifferences.ConfigurationManager.Language = "mssql";
+                    txtDifferences.IsReadOnly = false;
+                    txtDifferences.Styles.LineNumber.BackColor = Color.White;
+                    txtDifferences.Styles.LineNumber.IsVisible = false;
+                    txtDifferences.Text = destination.ToSqlDiff().ToSQL();
+                    txtDifferences.IsReadOnly = true;
+                    schemaView.DatabaseSource = destination;
+                    schemaView.DatabaseDestination = origin;
+                    schemaView.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaView_OnSelectItem);
 
                     btnCopy.Enabled = true;
                     btnSaveAs.Enabled = true;
@@ -138,24 +137,24 @@ namespace DBDiff.Front
             //Set the Title of the form
             this.Text = string.Format("SQL-DBDiff v{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
-            txtDiferencias.Text = "";
+            txtDifferences.Text = "";
         }
 
-        private void schemaTreeView1_OnSelectItem(string ObjectFullName)
+        private void schemaView_OnSelectItem(string ObjectFullName)
         {
             txtNewObject.IsReadOnly = false;
             txtOldObject.IsReadOnly = false;
             txtNewObject.Text = string.Empty;
             txtOldObject.Text = string.Empty;
 
-            Database database = (Database)schemaTreeView1.DatabaseSource;
+            Database database = (Database)schemaView.DatabaseSource;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.DropStatus)
                     txtNewObject.Text = database.Find(ObjectFullName).ToSql();
             }
 
-            database = (Database)schemaTreeView1.DatabaseDestination;
+            database = (Database)schemaView.DatabaseDestination;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.CreateStatus)
@@ -185,14 +184,14 @@ namespace DBDiff.Front
             if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
             {
                 StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false);
-                writer.Write(txtDiferencias.Text);
+                writer.Write(txtDifferences.Text);
                 writer.Close();
             }
         }
 
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(txtDiferencias.Text);
+            Clipboard.SetText(txtDifferences.Text);
         }
 
         private void btnOptions_Click(object sender, EventArgs e)
