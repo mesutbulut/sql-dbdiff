@@ -14,5 +14,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
             get { return alterObjectOnSchemaBinding; }
             set { alterObjectOnSchemaBinding = value; }
         }
+        
+        public SqlOptionScript()
+        { 
+        
+        }
     }
 }

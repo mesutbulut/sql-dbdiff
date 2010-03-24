@@ -203,7 +203,7 @@ namespace DBDiff.Front
         private void btnProject_Click(object sender, EventArgs e)
         {
 
-            ListProjectsForm form = new ListProjectsForm(Project.GetAll());
+            ListProjectsForm form = new ListProjectsForm(Project.AllProjects);
             form.OnSelect += new ListProjectHandler(form_OnSelect);
             form.OnDelete += new ListProjectHandler(form_OnDelete);
             form.OnRename += new ListProjectHandler(form_OnRename);
@@ -212,13 +212,11 @@ namespace DBDiff.Front
 
         private void form_OnRename(Project itemSelected)
         {
-
             Project.Save(itemSelected);
         }
 
         private void form_OnDelete(Project itemSelected)
         {
-
             Project.Delete(itemSelected.Id);
             if (ActiveProject != null)
             {
@@ -229,19 +227,16 @@ namespace DBDiff.Front
                     mySqlConnectFront2.ConnectionString = "";
                 }
             }
-
         }
 
         private void form_OnSelect(Project itemSelected)
         {
-
             if (itemSelected != null)
             {
                 ActiveProject = itemSelected;
                 mySqlConnectFront1.ConnectionString = itemSelected.ConnectionStringSource;
                 mySqlConnectFront2.ConnectionString = itemSelected.ConnectionStringDestination;
             }
-
         }
 
         private void btnNewProject_Click(object sender, EventArgs e)
@@ -273,7 +268,6 @@ namespace DBDiff.Front
 
         private void btnSaveProject_Click(object sender, EventArgs e)
         {
-
             if (ActiveProject == null)
             {
                 ActiveProject = new Project
@@ -284,7 +278,7 @@ namespace DBDiff.Front
                     Type = Project.ProjectType.SQLServer
                 };
             }
-            ActiveProject.Id = Project.Save(ActiveProject);
+            Project.Save(ActiveProject);
 
         }
         #endregion
