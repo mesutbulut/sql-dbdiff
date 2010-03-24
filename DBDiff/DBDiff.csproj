@@ -217,9 +217,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <Content Include="Database.sdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\NewProject.ico" />
     <None Include="Resources\SaveProject1.ico" />
     <None Include="Resources\Open1.ico" />
