@@ -59,7 +59,6 @@ namespace DBDiff.Front
                     item.ConnectionStringSource = projects[listView1.SelectedItems[0].Index].ConnectionStringSource;
                     item.Id = projects[listView1.SelectedItems[0].Index].Id;
                     item.Name = projects[listView1.SelectedItems[0].Index].Name;
-                    item.Options = projects[listView1.SelectedItems[0].Index].Options;
                     item.Type = projects[listView1.SelectedItems[0].Index].Type;
                     if (OnSelect != null)
                         OnSelect(item);
@@ -77,9 +76,10 @@ namespace DBDiff.Front
                                                           MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
+                        //Projects[] has a reference to the Project.AllProjects member, so if we delete one, it'll be updated here. No need to manage 2 lists.
                         if (OnDelete != null)
                             OnDelete(projects[listView1.SelectedItems[0].Index]);
-                        projects.Remove(projects[listView1.SelectedItems[0].Index]);
+
                         listView1.Items.Remove(listView1.SelectedItems[0]);
                     }
                 }

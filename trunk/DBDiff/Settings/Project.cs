@@ -4,61 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using DBDiff.Schema.SQLServer.Generates.Options;
-using System.Data.SqlServerCe;
 using System.IO;
 using System.Reflection;
+using System.Collections.ObjectModel;
+using System.Xml.Serialization;
 
 namespace DBDiff.Settings
 {
     public class Project
     {
-        #region SQL Statements
-        private static string ProjectUpdateSql = @"UPDATE Project SET Name = @Name, ConnectionStringSource = @ConnectionStringSource, ConnectionStringDestination = @ConnectionStringDestination, Type = @Type WHERE ProjectId = @ProjectId";
-        #endregion
+        private static string projectFile = string.Format("{0}\\Projects.xml", Path.GetDirectoryName(Assembly.GetCallingAssembly().Location));
+        public static List<Project> AllProjects { get; set; }
 
-        public enum ProjectType : short
-        {
+        #region Public Fields
+        public enum ProjectType
+        { 
             SQLServer = 1
         }
-
-        private static string connectionString = string.Format("Data Source={0}\\Database.sdf", Path.GetDirectoryName(Assembly.GetCallingAssembly().Location));
 
         public int Id { get; set; }
         public string ConnectionStringSource { get; set; }
         public string ConnectionStringDestination { get; set; }
-        public SqlOption Options { get; set; }
         public ProjectType Type { get; set; }
         public string Name { get; set; }
+        public bool WasLastUsed { get; set; }
+        #endregion
 
-        #region Private Static Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        static Project()
+        {
+            if (File.Exists(projectFile))
+                Project.Deserialize();
+            else
+                AllProjects = new List<Project>();
+        }
+
         /// <summary>
         /// Add a Project to the list in the databse
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        private static int Add(Project item)
+        public static void Add(Project item)
         {
-            int maxId = 0;
-            using (SqlCeConnection connection = new SqlCeConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCeTransaction transaction = connection.BeginTransaction())
-                {
-                    using (SqlCeCommand command = new SqlCeCommand("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.Options + "'," + ((int)item.Type).ToString() + ",0)", connection, transaction))
-                    {
-                        command.ExecuteNonQuery();
-
-                        command.CommandText = "SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0";
-                    
-                        using (SqlCeDataReader reader = command.ExecuteReader())
-                            if (reader.Read())
-                                maxId = int.Parse(reader["NewId"].ToString());
-                    }
-
-                    transaction.Commit();
-                }
-            }
-            return maxId;
+            AllProjects.Add(item);
         }
 
         /// <summary>
@@ -66,25 +56,19 @@ namespace DBDiff.Settings
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        private static int Update(Project item)
+        public static void Update(Project item)
         {
-            using (SqlCeConnection connection = new SqlCeConnection(connectionString))
+            Project toUpdate = AllProjects.Find(proj => proj.Id == item.Id);
+            toUpdate = new Project()
             {
-                connection.Open();
-                using (SqlCeCommand command = new SqlCeCommand(ProjectUpdateSql, connection))
-                {
-                    command.Parameters.Add("@Name", SqlDbType.NVarChar).Value = item.Name;
-                    command.Parameters.Add("@ConnectionStringSource", SqlDbType.NVarChar).Value = item.ConnectionStringSource;
-                    command.Parameters.Add("@ConnectionStringDestination", SqlDbType.NVarChar).Value = item.ConnectionStringDestination;
-                    command.Parameters.Add("@Type", SqlDbType.Int).Value = item.Type;
-                    command.Parameters.Add("@ProjectId", SqlDbType.Int).Value = item.Id;
-
-                    command.ExecuteNonQuery();
-                }
-            }
-            return item.Id;
+                ConnectionStringDestination = item.ConnectionStringDestination,
+                ConnectionStringSource = item.ConnectionStringSource,
+                Id = item.Id,
+                Name = item.Name,
+                Type = item.Type,
+                WasLastUsed = item.WasLastUsed
+            };
         }
-        #endregion
 
         /// <summary>
         /// Delete an item from the project list
@@ -92,14 +76,11 @@ namespace DBDiff.Settings
         /// <param name="Id"></param>
         public static void Delete(int Id)
         {
-            using (SqlCeConnection connection = new SqlCeConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCeCommand command = new SqlCeCommand("DELETE FROM Project WHERE ProjectId = " + Id.ToString(), connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-            }
+            Project toDelete = AllProjects.Find(proj => proj.Id == Id);
+            if (toDelete != null)
+                AllProjects.Remove(toDelete);
+
+            Serialize();
         }
 
         /// <summary>
@@ -107,94 +88,72 @@ namespace DBDiff.Settings
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static int Save(Project item)
+        public static void Save(Project item)
         {
-            if (item.Id == 0)
-                return Add(item);
+            Project projectToSave = AllProjects.Find(proj => proj.Id == item.Id);
 
-            return Update(item);
+            if (projectToSave == null)
+            {
+                item.Id = Project.AllProjects.Count + 1;
+                Add(item);
+            }
+            else
+                Update(projectToSave);
+
+            Serialize();
         }
 
-        public static void SaveLastConfiguration(String ConnectionStringSource, String ConnectionStringDestination)
+        public static void SaveLastConfiguration(string ConnectionStringSource, string ConnectionStringDestination)
         {
-            if (GetLastConfiguration() != null)
+            Project lastUsedProject = AllProjects.Find(proj => proj.ConnectionStringSource.ToLower() == ConnectionStringSource.ToLower() && proj.ConnectionStringDestination.ToLower() == ConnectionStringDestination.ToLower());
+            AllProjects.ForEach(proj => proj.WasLastUsed = false);
+
+            if (lastUsedProject == null)
             {
-                using (SqlCeConnection connection = new SqlCeConnection(connectionString))
-                {
-                    connection.Open();
-                    using (SqlCeCommand command = new SqlCeCommand("UPDATE Project SET ConnectionStringSource = '" + ConnectionStringSource + "', ConnectionStringDestination = '" + ConnectionStringDestination + "' WHERE Internal = 1", connection))
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                }
+                lastUsedProject = new Project() 
+                { 
+                    ConnectionStringDestination = ConnectionStringDestination, 
+                    ConnectionStringSource = ConnectionStringSource, 
+                    Type = ProjectType.SQLServer, 
+                    WasLastUsed = true
+                };
+                lastUsedProject.Id = Project.AllProjects.Count + 1;
+                Add(lastUsedProject);
             }
             else
             {
-                using (SqlCeConnection connection = new SqlCeConnection(connectionString))
-                {
-                    connection.Open();
-                    using (SqlCeCommand command = new SqlCeCommand("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('LastConfiguration','" + ConnectionStringSource + "','" + ConnectionStringDestination + "','',1,1)", connection))
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                }
+                lastUsedProject.WasLastUsed = true;
+                lastUsedProject.ConnectionStringSource = ConnectionStringSource;
+                lastUsedProject.ConnectionStringDestination = ConnectionStringDestination;
+                Update(lastUsedProject);
             }
+
+            //Serialize the changes back down to disk
+            Serialize();
         }
 
         public static Project GetLastConfiguration()
         {
-            Project item = null;
-            using (SqlCeConnection connection = new SqlCeConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCeCommand command = new SqlCeCommand("SELECT * FROM Project WHERE Internal = 1 ORDER BY Name", connection))
-                {
-                    using (SqlCeDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            item = new Project()
-                            {
-                                Id = int.Parse(reader["ProjectId"].ToString()),
-                                ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                                ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
-                                Type = (ProjectType)Convert.ToInt16(reader["Type"]),
-                                Name = reader["Name"].ToString()
-                            };
-                        }
-                    }
-                }
-            }
-            return item;
-
+            //Project item = null;
+            return AllProjects.Find(projects => projects.WasLastUsed);
         }
 
-        public static List<Project> GetAll()
+        private static void Serialize()
         {
-            List<Project> items = new List<Project>();
-            using (SqlCeConnection connection = new SqlCeConnection(connectionString))
+            XmlSerializer s = new XmlSerializer(typeof(List<Project>));
+            using (TextWriter w = new StreamWriter(projectFile))
+                s.Serialize(w, AllProjects);
+        }
+
+        private static void Deserialize()
+        {
+            XmlSerializer s = new XmlSerializer(typeof(List<Project>));
+            using (TextReader r = new StreamReader(projectFile))
             {
-                connection.Open();
-                using (SqlCeCommand command = new SqlCeCommand("SELECT * FROM Project WHERE Internal = 0 ORDER BY Name", connection))
-                {
-                    using (SqlCeDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Project item = new Project()
-                            {
-                                Id = int.Parse(reader["ProjectId"].ToString()),
-                                ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                                ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
-                                Type = (ProjectType)Convert.ToInt16(reader["Type"]),
-                                Name = reader["Name"].ToString()
-                            };
-                            items.Add(item);
-                        }
-                    }
-                }
+                AllProjects = s.Deserialize(r) as List<Project>;
+                if (AllProjects == null)
+                    AllProjects = new List<Project>();
             }
-            return items;
         }
     }
 }
