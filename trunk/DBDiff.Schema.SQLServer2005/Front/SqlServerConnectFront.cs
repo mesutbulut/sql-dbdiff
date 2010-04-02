@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using DBDiff.Front;
 using DBDiff.Schema.SQLServer.Generates.Front.Util;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 
 namespace DBDiff.Schema.SQLServer.Generates.Front
 {
@@ -180,7 +181,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (SqlCommand command = new SqlCommand("SELECT name,database_id FROM sys.databases ORDER BY Name", conn))
+                    using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetDatabases(DBDiff.Schema.SQLServer.Util.GetVersionNumber(conn)), conn))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
                         {

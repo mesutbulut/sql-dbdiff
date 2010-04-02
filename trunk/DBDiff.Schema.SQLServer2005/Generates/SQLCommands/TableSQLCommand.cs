@@ -8,10 +8,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
     internal static class TableSQLCommand
     {
         #region Table Count
-        public static string GetTableCount(DatabaseInfo.VersionTypeEnum version)
+        public static string GetTableCount(DatabaseInfo.VersionNumber version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return GetTableCount2000();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetTableCount2005();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2000) return GetTableCount2000();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2005) return GetTableCount2005();
             return "";
         }
 
@@ -27,11 +27,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         #endregion
 
         #region Table Detail
-        public static string GetTableDetail(DatabaseInfo.VersionTypeEnum version)
+        public static string GetTableDetail(DatabaseInfo.VersionNumber version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return GetTableDetail2000();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetTableDetail2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetTableDetail2008();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2000) return GetTableDetail2000();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2005) return GetTableDetail2005();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2008) return GetTableDetail2008();
             return "";
         }
 

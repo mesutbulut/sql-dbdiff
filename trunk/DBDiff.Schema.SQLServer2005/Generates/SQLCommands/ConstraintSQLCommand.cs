@@ -8,25 +8,25 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class ConstraintSQLCommand
     {
-        public static string GetUniqueKey(DatabaseInfo.VersionTypeEnum version)
+        public static string GetUniqueKey(DatabaseInfo.VersionNumber version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetUniqueKey2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetUniqueKey2008();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2005) return GetUniqueKey2005();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2008) return GetUniqueKey2008();
             return "";
         }
 
-        public static string GetCheck(DatabaseInfo.VersionTypeEnum version)
+        public static string GetCheck(DatabaseInfo.VersionNumber version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetCheck2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetCheck2008();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2005) return GetCheck2005();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2008) return GetCheck2008();
             return "";
         }
 
-        public static string GetPrimaryKey(DatabaseInfo.VersionTypeEnum version, Table table)
+        public static string GetPrimaryKey(DatabaseInfo.VersionNumber version, Table table)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return GetPrimaryKey2000(table);
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetPrimaryKey2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetPrimaryKey2008();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2000) return GetPrimaryKey2000(table);
+            if (version == DatabaseInfo.VersionNumber.SQLServer2005) return GetPrimaryKey2005();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2008) return GetPrimaryKey2008();
             return "";
         }
 
