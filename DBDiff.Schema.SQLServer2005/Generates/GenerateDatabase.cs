@@ -25,21 +25,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public DatabaseInfo Get(Database database)
         {
-            DatabaseInfo item = new DatabaseInfo();
             using (SqlConnection conn = new SqlConnection(connectioString))
             {
-                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetVersion(database), conn))
-                {
-                    conn.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            item.VersionNumber = float.Parse(reader["Version"].ToString().Replace(".",""));
-                        }
-                    }
-                }
-                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.Get(item.Version, database), conn))
+                DatabaseInfo item = new DatabaseInfo();
+                conn.Open();
+                
+                item.Version = DBDiff.Schema.SQLServer.Util.GetVersionNumber(conn);
+
+                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetDatabaseProperties(item.Version, database), conn))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -49,11 +42,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             item.HasFullTextEnabled = ((int)reader["IsFulltextEnabled"]) == 1;
                         }
                     }
+
                 }
 
+                return item;
             }
-            
-            return item;
         }
 
 

@@ -8,32 +8,35 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal class DatabaseSQLCommand
     {
-        public static string GetVersion(Database databaseSchema)
+        public static string GetDatabaseProperties(DatabaseInfo.VersionNumber version, Database databaseSchema)
         {
-            string sql;
-            sql = "SELECT SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+2) AS Version";
-            return sql;
+            switch (version)
+            {
+                case DatabaseInfo.VersionNumber.SQLServer2000:
+                case DatabaseInfo.VersionNumber.SQLServer2005:
+                case DatabaseInfo.VersionNumber.SQLServer2008:
+                    return string.Format("SELECT DATABASEPROPERTYEX('{0}','IsFulltextEnabled') AS IsFullTextEnabled, DATABASEPROPERTYEX('{0}','Collation') AS Collation", databaseSchema.Name);
+                    break;
+                default:
+                    return string.Empty;
+                    break;
+            }
         }
 
-        public static string Get(DatabaseInfo.VersionTypeEnum version, Database databaseSchema)
+        public static string GetDatabases(DatabaseInfo.VersionNumber version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005(databaseSchema);
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return Get2008(databaseSchema);
-            return "";
-        }
-
-        private static string Get2005(Database databaseSchema)
-        {
-            string sql;
-            sql = "SELECT DATABASEPROPERTYEX('" + databaseSchema.Name + "','IsFulltextEnabled') AS IsFullTextEnabled, DATABASEPROPERTYEX('" + databaseSchema.Name + "','Collation') AS Collation";
-            return sql;
-        }
-
-        private static string Get2008(Database databaseSchema)
-        {
-            string sql;
-            sql = "SELECT DATABASEPROPERTYEX('" + databaseSchema.Name + "','IsFulltextEnabled') AS IsFullTextEnabled, DATABASEPROPERTYEX('" + databaseSchema.Name + "','Collation') AS Collation";
-            return sql;
+            switch (version)
+            {
+                case DatabaseInfo.VersionNumber.SQLServer2000:
+                    return "SELECT name, dbid FROM master.dbo.sysdatabases ORDER BY Name";
+                    break;
+                case DatabaseInfo.VersionNumber.SQLServer2005:
+                case DatabaseInfo.VersionNumber.SQLServer2008:
+                    return "SELECT name, database_id FROM sys.databases ORDER BY Name"; 
+                    break;
+                default:
+                    return string.Empty;
+            }            
         }
     }
 }

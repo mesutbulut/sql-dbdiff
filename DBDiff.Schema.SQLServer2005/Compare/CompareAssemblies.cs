@@ -45,7 +45,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
         {
             bool pass = true;    
             Assembly newNode = (Assembly)node.Clone(CamposOrigen.Parent);               
-            if ((((Database)newNode.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2005) && (((Database)node.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008))
+            if ((((Database)newNode.RootParent).Info.Version == DatabaseInfo.VersionNumber.SQLServer2005) && (((Database)node.RootParent).Info.Version == DatabaseInfo.VersionNumber.SQLServer2008))
                 pass = node.FullName.Equals("Microsoft.SqlServer.Types");
             if (pass)
             {            

@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Data.SqlClient;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class DatabaseInfo
     {
-        public enum VersionTypeEnum
+        public enum VersionNumber
         {
-            SQLServer2000 = 1,
-            SQLServer2005 = 2,
-            SQLServer2008 = 3
+            SQLServer2000 = 8,
+            SQLServer2005 = 9,
+            SQLServer2008 = 10
         }
 
-        private float versionNumber;
-        private VersionTypeEnum version;
         private string collation;
         private bool hasChangeTracking;
         private bool isChangeTrackingAutoCleanup;
@@ -25,13 +24,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public DatabaseInfo()
         {
-            version = VersionTypeEnum.SQLServer2005;
+            Version = VersionNumber.SQLServer2005;
         }
 
-        public VersionTypeEnum Version
-        {
-            get { return version; }
-        }
+        public VersionNumber Version { get; set; }
 
         public string Collation
         {
@@ -73,18 +69,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             get { return hasChangeTracking; }
             set { hasChangeTracking = value; }
-        }
-
-        public float VersionNumber
-        {
-            get { return versionNumber; }
-            set
-            {
-                versionNumber = value;
-                if ((versionNumber >= 8) && (versionNumber < 9)) version = VersionTypeEnum.SQLServer2000;
-                if ((versionNumber >= 9) && (versionNumber < 10)) version = VersionTypeEnum.SQLServer2005;
-                if ((versionNumber >= 10) && (versionNumber < 11)) version = VersionTypeEnum.SQLServer2008;
-            }
         }
     }
 }

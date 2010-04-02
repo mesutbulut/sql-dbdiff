@@ -8,10 +8,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class FullTextIndexSQLCommand
     {
-        public static string Get(DatabaseInfo.VersionTypeEnum version)
+        public static string Get(DatabaseInfo.VersionNumber version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return Get2008();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2005) return Get2005();
+            if (version == DatabaseInfo.VersionNumber.SQLServer2008) return Get2008();
             return "";
         }
 
