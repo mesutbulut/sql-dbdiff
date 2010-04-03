@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
@@ -14,61 +15,52 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             SQLServer2008 = 10
         }
 
-        private string collation;
-        private bool hasChangeTracking;
-        private bool isChangeTrackingAutoCleanup;
-        private int changeTrackingRetentionPeriod;
-        private int changeTrackingPeriodUnits;
-        private string changeTrackingPeriodUnitsDesc;
-        private bool hasFullTextEnabled;
+        private string _connectionString;
+        private Database _database;
 
-        public DatabaseInfo()
+        public DatabaseInfo(string connectionString, Database database)
         {
             Version = VersionNumber.SQLServer2005;
+            this._connectionString = connectionString;
+            this._database = database;
+
+            //Initialise all the properties of this database
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+
+                //Set the version number
+                this.Version = DBDiff.Schema.SQLServer.Util.GetVersionNumber(conn);
+
+                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetDatabaseProperties(this.Version, this._database), conn))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            this.Collation = reader["Collation"].ToString();
+                            this.HasFullTextEnabled = ((int)reader["IsFulltextEnabled"]) == 1;
+                        }
+                    }
+
+                }
+            }
         }
 
-        public VersionNumber Version { get; set; }
+        public VersionNumber Version { get; private set; }
 
-        public string Collation
-        {
-            get { return collation; }
-            set { collation = value; }
-        }
+        public string Collation { get; private set; }
 
-        public bool HasFullTextEnabled
-        {
-            get { return hasFullTextEnabled; }
-            set { hasFullTextEnabled = value; }
-        }
+        public bool HasFullTextEnabled { get; private set; }
 
-        public string ChangeTrackingPeriodUnitsDesc
-        {
-            get { return changeTrackingPeriodUnitsDesc; }
-            set { changeTrackingPeriodUnitsDesc = value; }
-        }
+        public string ChangeTrackingPeriodUnitsDesc { get; private set; }
 
-        public int ChangeTrackingPeriodUnits
-        {
-            get { return changeTrackingPeriodUnits; }
-            set { changeTrackingPeriodUnits = value; }
-        }
+        public int ChangeTrackingPeriodUnits { get; private set; }
 
-        public int ChangeTrackingRetentionPeriod
-        {
-            get { return changeTrackingRetentionPeriod; }
-            set { changeTrackingRetentionPeriod = value; }
-        }
+        public int ChangeTrackingRetentionPeriod { get; private set; }
 
-        public bool IsChangeTrackingAutoCleanup
-        {
-            get { return isChangeTrackingAutoCleanup; }
-            set { isChangeTrackingAutoCleanup = value; }
-        }
+        public bool IsChangeTrackingAutoCleanup { get; private set; }
 
-        public bool HasChangeTracking
-        {
-            get { return hasChangeTracking; }
-            set { hasChangeTracking = value; }
-        }
+        public bool HasChangeTracking { get; private set; }
     }
 }

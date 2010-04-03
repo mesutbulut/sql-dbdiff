@@ -10,43 +10,22 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
     public class GenerateDatabase
     {
-        private string connectioString;
-        private SqlOption objectFilter;
+        private string _connectionString;
+        private SqlOption _objectFilter;
 
                 /// <summary>
         /// Constructor de la clase.
         /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateDatabase(string connectioString, SqlOption filter)
+        /// <param name="connectioString">Connection string to the SQL Server</param>
+        public GenerateDatabase(string connectionString, SqlOption filter)
         {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
+            this._connectionString = connectionString;
+            this._objectFilter = filter;
         }
 
         public DatabaseInfo Get(Database database)
         {
-            using (SqlConnection conn = new SqlConnection(connectioString))
-            {
-                DatabaseInfo item = new DatabaseInfo();
-                conn.Open();
-                
-                item.Version = DBDiff.Schema.SQLServer.Util.GetVersionNumber(conn);
-
-                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetDatabaseProperties(item.Version, database), conn))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            item.Collation = reader["Collation"].ToString();
-                            item.HasFullTextEnabled = ((int)reader["IsFulltextEnabled"]) == 1;
-                        }
-                    }
-
-                }
-
-                return item;
-            }
+            return new DatabaseInfo(_connectionString, database);
         }
 
 
