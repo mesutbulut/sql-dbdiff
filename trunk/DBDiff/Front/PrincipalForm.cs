@@ -52,7 +52,7 @@ namespace DBDiff.Front
                     sql2.ConnectionString = mySqlConnectFront2.ConnectionString;
                     sql2.Options = SqlFilter;
 
-                    ProgressForm progres = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
+                    ProgressForm progres = new ProgressForm("Reference Database", "Target Database", sql2, sql1);
                     progres.ShowDialog(this);
                     origin = progres.Source;
                     destination = progres.Destination;
@@ -93,7 +93,7 @@ namespace DBDiff.Front
                 (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
 
             mySqlConnectFront1.TabIndex = 10;
-            mySqlConnectFront1.Text = "Source Database:";
+            mySqlConnectFront1.Text = "Reference Database:";
             mySqlConnectFront2.Location = new Point(1, 1);
             mySqlConnectFront2.Name = "mySqlConnectFront2";
             mySqlConnectFront2.Anchor =
@@ -101,7 +101,7 @@ namespace DBDiff.Front
             mySqlConnectFront2.TabIndex = 10;
             mySqlConnectFront1.Visible = true;
             mySqlConnectFront2.Visible = true;
-            mySqlConnectFront2.Text = "Destination Database:";
+            mySqlConnectFront2.Text = "Target Database:";
             ((SqlServerConnectFront)mySqlConnectFront1).UserName = "sa";
             ((SqlServerConnectFront)mySqlConnectFront1).Password = "";
             ((SqlServerConnectFront)mySqlConnectFront1).ServerName = "(local)";
